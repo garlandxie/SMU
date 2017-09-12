@@ -61,8 +61,9 @@ fnn <- fnn[, c("mod", "treat", "nosp", # treatments
 ### Multiple Linear Regression: FD, SR, PD and service indicators ####
 
 ## org - linear model input
-lm_org2 <- lm(org ~ FD + SR + PD, data = fnn)
+lm_org_SFP <- lm(log(org) ~ FD + SR + PD, data = fnn)
 
+summary(lm_org_SFP)
 #  Residuals:
 #  Min      1Q  Median      3Q     Max 
 # -1.9916 -0.6233 -0.0954  0.4113  4.9797 
@@ -74,28 +75,29 @@ lm_org2 <- lm(org ~ FD + SR + PD, data = fnn)
 #  SR           0.1245129  0.2603342   0.478    0.634    
 #  PD          -0.0002405  0.0018695  -0.129    0.898    
 #---
-#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 # Residual standard error: 1.03 on 83 degrees of freedom
 # Multiple R-squared:  0.01724,	Adjusted R-squared:  -0.01828 
 # F-statistic: 0.4855 on 3 and 83 DF,  p-value: 0.6933
 
 ## model diagnostics for multiple regression - lm_org2
-(plot(lm_org2))
+(plot(lm_org_SFP))
 
 # Residuals vs Fitted: looks fine
-# QQ plot: skewness on the right side of plot
+# QQ plot: skewness on the right side of plot, a couple of outliers
 # scale-location: some evidence of heterodaskicity (decrease then goes a bit flat)
 # residuals vs leverage: high residual, low leverage 
 
 ## model validity - histogram of residuals from lm_org2 model
-(hist(lm_org2$residuals))
+(hist(lm_org_SFP$residuals))
 
-# right-skewness
+# right-skewness, departure from normality
 
 # K
-lm_K2 <- lm(K ~ FD + SR + PD, data = fnn)
+lm_K_SFP <- lm(K ~ FD + SR + PD, data = fnn)
 
+summary(lm_K_SFP)
 # Residuals:
 #  Min      1Q  Median      3Q     Max 
 # -67.780 -27.131   2.444  22.572 148.376 
@@ -107,15 +109,24 @@ lm_K2 <- lm(K ~ FD + SR + PD, data = fnn)
 # SR            4.437733  10.140422   0.438    0.663    
 # PD           -0.002527   0.072821  -0.035    0.972    
 # ---
-#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 # Residual standard error: 40.11 on 83 degrees of freedom
 # Multiple R-squared:  0.04541,	Adjusted R-squared:  0.0109 
 # F-statistic: 1.316 on 3 and 83 DF,  p-value: 0.2747
 
-# P 
-lm_P2 <- lm(P ~ FD + SR + PD, data = fnn)
+## model diagnostics for multiple regression - lm_K2
+(plot(lm_K_SFP))
 
+# residual vs fitted: looks fine
+# QQ plot: skewed distribution
+# scale-location: sloped lowess curve, evidence of heteroskedasticity
+# resid vs lev: looks OK?
+
+# P 
+lm_P_SFP <- lm(P ~ FD + SR + PD, data = fnn)
+
+summary(lm_P_SFP)
 # Residuals:
 #  Min      1Q  Median      3Q     Max 
 #-76.223 -22.532  -2.106  23.375  85.907 
@@ -127,15 +138,19 @@ lm_P2 <- lm(P ~ FD + SR + PD, data = fnn)
 #  SR           -6.40348    7.80646   -0.82   0.4144    
 #  PD            0.11775    0.05606    2.10   0.0387 *  
 #  ---
-#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 # Residual standard error: 30.88 on 83 degrees of freedom
 # Multiple R-squared:  0.05147,	Adjusted R-squared:  0.01718 
 # F-statistic: 1.501 on 3 and 83 DF,  p-value: 0.2203
 
-# NO3
-lm_NO3 <- lm(NO3 ~ FD + SR + PD, data = fnn)
+## model diagnostics for multiple regression - lm_P2
+(plot(lm_P_SFP))
 
+# NO3
+lm_NO3_SFP <- lm(NO3 ~ FD + SR + PD, data = fnn)
+
+summary(lm_NO3_SFP)
 # Residuals:
 #  Min      1Q  Median      3Q     Max 
 # -1.2401 -0.4996 -0.1779  0.2398  6.1556 
@@ -147,17 +162,28 @@ lm_NO3 <- lm(NO3 ~ FD + SR + PD, data = fnn)
 #  SR          -0.574550   0.237583  -2.418   0.0178 *
 #  PD          -0.001903   0.001706  -1.115   0.2679  
 # ---
-#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 # Residual standard error: 0.9397 on 83 degrees of freedom
 # Multiple R-squared:  0.1221,	Adjusted R-squared:  0.09032 
 # F-statistic: 3.846 on 3 and 83 DF,  p-value: 0.01246
 
-# NOTES: only super interesting result here - FD is a stronger predictor than SR (based on effect sizes)
+## model diagnostics for multiple regression - lm_NO3
+(plot(lm_NO3))
+
+# Residuals vs Fitted: possible evidence of nonconstant variance but it looks fine
+# QQ plot: departure from normality; skewness
+# scale-location: some evidence of heterodaskicity (decrease then goes a bit flat)
+# residuals vs leverage: high residual, low leverage 
+
+# NOTES:
+# FD is a stronger predictor than SR (based on effect sizes)
+# multicollinearity is still an issue though
 
 # totbio
-lm_totbio2 <- lm(totbio ~ FD + SR + PD, data = fnn)
+lm_totbio_SFP <- lm(totbio ~ FD + SR + PD, data = fnn)
 
+summary(lm_totbio_SFP)
 # Residuals:
 #  Min      1Q  Median      3Q     Max 
 #-44.757 -21.481  -3.625  20.371  47.261 
@@ -169,15 +195,20 @@ lm_totbio2 <- lm(totbio ~ FD + SR + PD, data = fnn)
 #  SR           4.49398    6.40076   0.702  0.48458   
 #  PD          -0.02445    0.04597  -0.532  0.59617   
 # ---
-#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 # Residual standard error: 25.32 on 83 degrees of freedom
 # Multiple R-squared:  0.0259,	Adjusted R-squared:  -0.009307 
 # F-statistic: 0.7357 on 3 and 83 DF,  p-value: 0.5337
 
-# strat10
-lm_strat10_2 <- lm(strat10 ~ FD + SR + PD, data = fnn)
+## model diagnostics for multiple regression - lm_NO3
+(plot(lm_totbio_SFP))
 
+
+# strat10
+lm_strat10_SFP <- lm(strat10 ~ FD + SR + PD, data = fnn)
+
+plot(lm_strat10_SFP)
 # Residuals:
 #  Min      1Q  Median      3Q     Max 
 # -45.187 -17.711  -0.831  18.002  39.030 
@@ -189,15 +220,21 @@ lm_strat10_2 <- lm(strat10 ~ FD + SR + PD, data = fnn)
 #  SR          -2.28592    5.52944  -0.413    0.680    
 #  PD          -0.01580    0.03971  -0.398    0.692    
 #---
-#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 # Residual standard error: 21.87 on 83 degrees of freedom
 # Multiple R-squared:  0.08578,	Adjusted R-squared:  0.05274 
 # F-statistic: 2.596 on 3 and 83 DF,  p-value: 0.05786
 
-# crat10
-lm_crat10_2 <- lm(crat10 ~ FD + SR + PD, data = fnn)
+## model diagnostics for multiple regression - lm_strat10
+(plot(lm_strat10_SFP)) 
 
+# looks fine
+
+# crat10
+lm_crat10_SFP <- lm(crat10 ~ FD + SR + PD, data = fnn)
+
+summary(lm_crat10_SFP)
 # Residuals:
 #  Min       1Q   Median       3Q      Max 
 # -0.18242 -0.08022 -0.02893  0.05051  0.31634 
@@ -209,14 +246,20 @@ lm_crat10_2 <- lm(crat10 ~ FD + SR + PD, data = fnn)
 #  SR          -0.0041769  0.0279744  -0.149    0.882    
 #  PD           0.0002839  0.0002009   1.413    0.161    
 # ---
-#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 # Residual standard error: 0.1107 on 83 degrees of freedom
 # Multiple R-squared:  0.02507,	Adjusted R-squared:  -0.01017 
 # F-statistic: 0.7115 on 3 and 83 DF,  p-value: 0.5478
 
+## model diagnostics for multiple regression - lm_crat10
+(plot(lm_crat10_SFP)) 
+
+# looks reasonable
+
+
 # hits10
-lm_hits10_2 <- lm(hits10 ~ FD + SR + PD, data = fnn)
+lm_hits10_SFP <- lm(hits10 ~ FD + SR + PD, data = fnn)
 
 # Residuals:
 #  Min       1Q   Median       3Q      Max 
@@ -229,14 +272,23 @@ lm_hits10_2 <- lm(hits10 ~ FD + SR + PD, data = fnn)
 #  SR           -0.7718    19.3375  -0.040 0.968258    
 #  PD            0.1766     0.1389   1.271 0.207127    
 # ---
-#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#  Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
 
 # Residual standard error: 76.49 on 83 degrees of freedom
 # Multiple R-squared:  0.03142,	Adjusted R-squared:  -0.003586 
 # F-statistic: 0.8976 on 3 and 83 DF,  p-value: 0.4461
 
+## model diagnostics for multiple regression - lm_hits10
+(plot(lm_hits10_SFP)) 
+
+
+# residuals vs fitted: looks fine
+# QQ plot: skewed distribution (might not be a big deal?)
+# scale-location: sloped lowess curve, heteroscedastic 
+# cook's distance: looks fine
+
 # ind1
-lm_ind1_2 <- lm(ind1 ~ FD + SR + PD, data = fnn)
+lm_ind1_SFP <- lm(ind1 ~ FD + SR + PD, data = fnn)
 
 # Residuals:
 #  Min       1Q   Median       3Q      Max 
@@ -254,7 +306,7 @@ lm_ind1_2 <- lm(ind1 ~ FD + SR + PD, data = fnn)
 # F-statistic: 2.246 on 3 and 83 DF,  p-value: 0.08905
 
 # ind2
-lm_ind2_2 <- lm(ind2 ~ FD + SR + PD, data = fnn)
+lm_ind2_SFP <- lm(ind2 ~ FD + SR + PD, data = fnn)
 
 # Residuals:
 #  Min       1Q   Median       3Q      Max 
@@ -270,3 +322,9 @@ lm_ind2_2 <- lm(ind2 ~ FD + SR + PD, data = fnn)
 # Residual standard error: 3.485 on 83 degrees of freedom
 # Multiple R-squared:  0.05549,	Adjusted R-squared:  0.02135 
 # F-statistic: 1.625 on 3 and 83 DF,  p-value: 0.1897
+
+## model diagnostics for multiple regression - lm_ind2
+(plot(lm_ind2_SFP))
+
+# everything looks reasonable
+
