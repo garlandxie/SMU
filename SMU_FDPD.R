@@ -1,5 +1,8 @@
-
 ################ SMU PD-FD ANALYSIS #####################
+
+### Import libraries ####
+
+library(broom) # cleaning data by taking lm model summaries into dataframes
 
 ### Metadata ####
 
@@ -11,9 +14,9 @@
 ## fnn 
 # mod: ID for each green roof module (excludes monocultures since we couldn't calculate MPD nor Rao's Q)
 # treat: experimental treatments 
-  # d, g, s, t (life forms, 3 spp)
-  # cts, dcs, dct, dgc, dgs, dgt, dts, gcs, gts (combos of lifeforms, 9 spp)
-  # cdgst (all spp, 15 spp)
+# d, g, s, t (life forms, 3 spp)
+# cts, dcs, dct, dgc, dgs, dgt, dts, gcs, gts (combos of lifeforms, 9 spp)
+# cdgst (all spp, 15 spp)
 # nosp - planted species richness (nosp)
 # mPD - mean pairwise phylogenetic distance (phylo diversity measure)
 # PD - faith's PD as phylogenetic richness (phylo diversity measure)
@@ -60,10 +63,32 @@ fnn <- fnn[, c("mod", "treat", "nosp", # treatments
 
 ### Multiple Linear Regression: FD, SR, PD and service indicators ####
 
-## org - linear model input
-lm_org_SFP <- lm(log(org) ~ FD + SR + PD, data = fnn)
+# first, cram all of the possible multiple regression models into a list object
+# reason: less memory space, easier access and a clean environment workspace
 
-summary(lm_org_SFP)
+models_SFP <- list(lm(log(org) ~ FD + SR + PD, data = fnn), # org
+                   lm(K ~ FD + SR + PD, data = fnn), # K
+                   lm(P ~ FD + SR + PD, data = fnn), # P
+                   lm(NO3 ~ FD + SR + PD, data = fnn), # NO3
+                   lm(totbio ~ FD + SR + PD, data = fnn), #totbio
+                   lm(strat10 ~ FD + SR + PD, data = fnn), # strat10
+                   lm(crat10 ~ FD + SR + PD, data = fnn), # crat10
+                   lm(hits10 ~ FD + SR + PD, data = fnn), # hits10
+                   lm(ind1 ~ FD + SR + PD, data = fnn), # ind1
+                   lm(ind2 ~ FD + SR + PD, data = fnn) # ind2
+                   )
+                   
+# next, create names for each lm object in the list so that it can be indexed quickly
+# all linear models have consistent set of predictor vars; using service indicators is fine 
+# make sure it's named in the correct order to service indicators 
+
+names(models_SFP) <- c("org", "K", "P", "NO3", "totbio", 
+                   "strat10", "crat10", "hits10", "ind1", "ind2")
+                   
+
+## org - linear model input
+summary(models_SFP$org)
+
 #  Residuals:
 #  Min      1Q  Median      3Q     Max 
 # -1.9916 -0.6233 -0.0954  0.4113  4.9797 
@@ -82,7 +107,7 @@ summary(lm_org_SFP)
 # F-statistic: 0.4855 on 3 and 83 DF,  p-value: 0.6933
 
 ## model diagnostics for multiple regression - lm_org2
-(plot(lm_org_SFP))
+(plot(models_SFP$org))
 
 # Residuals vs Fitted: looks fine
 # QQ plot: skewness on the right side of plot, a couple of outliers
@@ -90,14 +115,14 @@ summary(lm_org_SFP)
 # residuals vs leverage: high residual, low leverage 
 
 ## model validity - histogram of residuals from lm_org2 model
-(hist(lm_org_SFP$residuals))
+(hist(resid(models_SFP$org)))
 
 # right-skewness, departure from normality
 
 # K
-lm_K_SFP <- lm(K ~ FD + SR + PD, data = fnn)
+summary(models_SFP$K)
 
-summary(lm_K_SFP)
+summary(models_SFP$K)
 # Residuals:
 #  Min      1Q  Median      3Q     Max 
 # -67.780 -27.131   2.444  22.572 148.376 
@@ -116,7 +141,7 @@ summary(lm_K_SFP)
 # F-statistic: 1.316 on 3 and 83 DF,  p-value: 0.2747
 
 ## model diagnostics for multiple regression - lm_K2
-(plot(lm_K_SFP))
+(plot(models_SFP$K))
 
 # residual vs fitted: looks fine
 # QQ plot: skewed distribution
@@ -124,9 +149,9 @@ summary(lm_K_SFP)
 # resid vs lev: looks OK?
 
 # P 
-lm_P_SFP <- lm(P ~ FD + SR + PD, data = fnn)
+models_SFP$P
 
-summary(lm_P_SFP)
+summary(models_SFP$P)
 # Residuals:
 #  Min      1Q  Median      3Q     Max 
 #-76.223 -22.532  -2.106  23.375  85.907 
@@ -148,9 +173,9 @@ summary(lm_P_SFP)
 (plot(lm_P_SFP))
 
 # NO3
-lm_NO3_SFP <- lm(NO3 ~ FD + SR + PD, data = fnn)
+summary(models_SFP$NO3)
 
-summary(lm_NO3_SFP)
+summary(models_SFP$NO3)
 # Residuals:
 #  Min      1Q  Median      3Q     Max 
 # -1.2401 -0.4996 -0.1779  0.2398  6.1556 
@@ -169,7 +194,7 @@ summary(lm_NO3_SFP)
 # F-statistic: 3.846 on 3 and 83 DF,  p-value: 0.01246
 
 ## model diagnostics for multiple regression - lm_NO3
-(plot(lm_NO3))
+(plot(models_SFP$NO3))
 
 # Residuals vs Fitted: possible evidence of nonconstant variance but it looks fine
 # QQ plot: departure from normality; skewness
@@ -181,9 +206,9 @@ summary(lm_NO3_SFP)
 # multicollinearity is still an issue though
 
 # totbio
-lm_totbio_SFP <- lm(totbio ~ FD + SR + PD, data = fnn)
+summary(models_SFP$totbio)
 
-summary(lm_totbio_SFP)
+summary(models_SFP$totbio)
 # Residuals:
 #  Min      1Q  Median      3Q     Max 
 #-44.757 -21.481  -3.625  20.371  47.261 
@@ -202,13 +227,12 @@ summary(lm_totbio_SFP)
 # F-statistic: 0.7357 on 3 and 83 DF,  p-value: 0.5337
 
 ## model diagnostics for multiple regression - lm_NO3
-(plot(lm_totbio_SFP))
+(plot(models_SFP$totbio))
 
 
 # strat10
-lm_strat10_SFP <- lm(strat10 ~ FD + SR + PD, data = fnn)
+summary(models_SFP$strat10)
 
-plot(lm_strat10_SFP)
 # Residuals:
 #  Min      1Q  Median      3Q     Max 
 # -45.187 -17.711  -0.831  18.002  39.030 
@@ -232,9 +256,8 @@ plot(lm_strat10_SFP)
 # looks fine
 
 # crat10
-lm_crat10_SFP <- lm(crat10 ~ FD + SR + PD, data = fnn)
+summary(models_SFP$crat10)
 
-summary(lm_crat10_SFP)
 # Residuals:
 #  Min       1Q   Median       3Q      Max 
 # -0.18242 -0.08022 -0.02893  0.05051  0.31634 
@@ -253,13 +276,13 @@ summary(lm_crat10_SFP)
 # F-statistic: 0.7115 on 3 and 83 DF,  p-value: 0.5478
 
 ## model diagnostics for multiple regression - lm_crat10
-(plot(lm_crat10_SFP)) 
+(plot(models_SFP$crat10)) 
 
 # looks reasonable
 
 
 # hits10
-lm_hits10_SFP <- lm(hits10 ~ FD + SR + PD, data = fnn)
+summary(models_SFP$hits10)
 
 # Residuals:
 #  Min       1Q   Median       3Q      Max 
@@ -279,7 +302,7 @@ lm_hits10_SFP <- lm(hits10 ~ FD + SR + PD, data = fnn)
 # F-statistic: 0.8976 on 3 and 83 DF,  p-value: 0.4461
 
 ## model diagnostics for multiple regression - lm_hits10
-(plot(lm_hits10_SFP)) 
+(plot(models_SFP$hits10)) 
 
 
 # residuals vs fitted: looks fine
@@ -288,7 +311,7 @@ lm_hits10_SFP <- lm(hits10 ~ FD + SR + PD, data = fnn)
 # cook's distance: looks fine
 
 # ind1
-lm_ind1_SFP <- lm(ind1 ~ FD + SR + PD, data = fnn)
+summary(models_SFP$ind1)
 
 # Residuals:
 #  Min       1Q   Median       3Q      Max 
@@ -306,7 +329,7 @@ lm_ind1_SFP <- lm(ind1 ~ FD + SR + PD, data = fnn)
 # F-statistic: 2.246 on 3 and 83 DF,  p-value: 0.08905
 
 # ind2
-lm_ind2_SFP <- lm(ind2 ~ FD + SR + PD, data = fnn)
+summary(models_SFP$ind2)
 
 # Residuals:
 #  Min       1Q   Median       3Q      Max 
@@ -324,7 +347,20 @@ lm_ind2_SFP <- lm(ind2 ~ FD + SR + PD, data = fnn)
 # F-statistic: 1.625 on 3 and 83 DF,  p-value: 0.1897
 
 ## model diagnostics for multiple regression - lm_ind2
-(plot(lm_ind2_SFP))
+(plot(models_SFP$ind2))
 
 # everything looks reasonable
+
+### Coercing model summary to dataframes ####
+
+# since all of the lm model objects are in a single list, 
+# you can create a dataframe of the model outputs by looping through each lm object, 
+# then applying the tidy function to create the dataframe
+all_coefs_SFP <- plyr::ldply(models_SFP, tidy, .id = "model")
+
+# change the working directory to save your output
+setwd("C:/Users/garla/Google Drive/Research Projects/SMU_12sp_Phylogeny/SMU_PD-FD_Data/SMU_CSV")
+
+# coerce the data-frame into a csv file 
+write.csv(all_coefs_SFP, "appendix_lm_SFP_table.csv")
 
