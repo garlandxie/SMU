@@ -425,3 +425,140 @@ summary(avg_models$ind2)
 #N containing models:   64            64           64          64         64             64        64 
 
 
+
+### Linear model (re-evaluation) ####
+
+# re-evaluate models using significant predictors from MuMIn analyses based on conditional averaging
+# hard to use lapply() since there is no consistent set of predictors
+lm_rev_mods <- list(lm(org ~ scale(RaoQ), data = fnn), #org
+                    lm(P ~ scale(CWM_H), data = fnn), # P
+                    lm(K ~ scale(CWM_H) + scale(CWM_LA) + scale(RaoQ) + scale(CWM_SLA), data = fnn), # K
+                    lm(NO3 ~ scale(CWM_H) + scale(CWM_LA) + scale(CWM_SLA), data = fnn), # NO3
+                    lm(totbio ~ scale(CWM_LA) + scale(CWM_SLA), data = fnn), # totbio
+                    lm(strat10 ~ scale(CWM_H) + scale(mPD) + scale(PD), data = fnn), # strat10
+                    # nothing significant for crat10 from MuMIn
+                    lm(hits10 ~ scale(CWM_LA) + scale(CWM_SLA) + scale(RaoQ), data = fnn),
+                    # nothing significant for ind1 from MuMIn
+                    lm(ind2 ~ scale(CWM_H) + scale(CWM_LA), data = fnn)
+                    )
+
+names(lm_rev_mods) <- c("org", "P", "K", "NO3", "totbio", "strat10", "hits10", "ind2")
+
+### Summary outputs for re-evaluated linear models
+
+summary(lm_rev_mods$org)
+
+# Coefficients:
+#                Estimate Std. Error t value Pr(>|t|)    
+#  (Intercept)   7.7276     0.1034  74.763  < 2e-16 ***
+#  scale(RaoQ)   0.3502     0.1040   3.369  0.00114 ** 
+#  ---
+#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+#Residual standard error: 0.9641 on 85 degrees of freedom
+#Multiple R-squared:  0.1178,	Adjusted R-squared:  0.1074 
+#F-statistic: 11.35 on 1 and 85 DF,  p-value: 0.001136
+
+summary(lm_rev_mods$P)
+# Coefficients:
+#               Estimate Std. Error t value Pr(>|t|)    
+# (Intercept)   219.368      3.280   66.87   <2e-16 ***
+#  scale(CWM_H)    6.697      3.299    2.03   0.0455 *  
+#  ---
+#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+# Residual standard error: 30.6 on 85 degrees of freedom
+# Multiple R-squared:  0.04623,	Adjusted R-squared:  0.03501 
+# F-statistic:  4.12 on 1 and 85 DF,  p-value: 0.0455
+
+## K
+
+summary(lm_rev_mods$K)
+
+# Coefficients:
+#                Estimate Std. Error t value Pr(>|t|)    
+#(Intercept)     219.046      3.984  54.978  < 2e-16 ***
+#  scale(CWM_H)    -27.165      9.836  -2.762  0.00709 ** 
+#  scale(CWM_LA)    18.964      8.498   2.232  0.02837 *  
+#  scale(RaoQ)      12.945      5.928   2.184  0.03183 *  
+#  scale(CWM_SLA)    5.167      4.762   1.085  0.28107    
+#---
+#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+#Residual standard error: 37.16 on 82 degrees of freedom
+#Multiple R-squared:  0.1904,	Adjusted R-squared:  0.1509 
+#F-statistic: 4.822 on 4 and 82 DF,  p-value: 0.001526
+
+# model diagnostics
+(plot(lm_rev_mods$K))
+
+
+summary(lm_rev_mods$NO3)
+# Coefficients:
+#                Estimate Std. Error t value Pr(>|t|)    
+#  (Intercept)     1.00345    0.08256  12.154  < 2e-16 ***
+#  scale(CWM_H)    0.86113    0.17915   4.807 6.74e-06 ***
+#  scale(CWM_LA)  -1.21365    0.17585  -6.901 9.50e-10 ***
+#  scale(CWM_SLA)  0.29385    0.08929   3.291  0.00147 ** 
+#  ---
+#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+#Residual standard error: 0.7701 on 83 degrees of freedom
+#Multiple R-squared:  0.4105,	Adjusted R-squared:  0.3892 
+#F-statistic: 19.26 on 3 and 83 DF,  p-value: 1.428e-09
+
+summary(lm_rev_mods$totbio)
+# Coefficients:
+#                Estimate Std. Error t value Pr(>|t|)    
+#  (Intercept)      42.034      2.005  20.962  < 2e-16 ***
+#  scale(CWM_LA)    11.186      2.017   5.546 3.31e-07 ***
+#  scale(CWM_SLA)   13.072      2.017   6.481 5.90e-09 ***
+#  ---
+#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+# Residual standard error: 18.7 on 84 degrees of freedom
+# Multiple R-squared:  0.462,	Adjusted R-squared:  0.4492 
+# F-statistic: 36.06 on 2 and 84 DF,  p-value: 4.942e-12
+
+summary(lm_rev_mods$strat10)
+# Coefficients:
+#                Estimate Std. Error t value Pr(>|t|)    
+#   (Intercept)    39.736      2.210  17.982  < 2e-16 ***
+#  scale(CWM_H)    6.495      2.412   2.693 0.008568 ** 
+#  scale(mPD)      5.604      3.445   1.626 0.107651    
+#  scale(PD)     -13.126      3.487  -3.764 0.000311 ***
+#  ---
+#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+# Residual standard error: 20.61 on 83 degrees of freedom
+# Multiple R-squared:  0.1881,	Adjusted R-squared:  0.1587 
+# F-statistic: 6.409 on 3 and 83 DF,  p-value: 0.0005862
+
+summary(lm_rev_mods$hits10)
+# Coefficients:
+#                 Estimate Std. Error t value Pr(>|t|)    
+#   (Intercept)     139.092      5.890  23.615  < 2e-16 ***
+#  scale(CWM_LA)    53.547      7.561   7.082 4.22e-10 ***
+#  scale(CWM_SLA)   35.207      6.115   5.757 1.40e-07 ***
+#  scale(RaoQ)     -19.594      7.703  -2.544   0.0128 *  
+#  ---
+#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+# Residual standard error: 54.94 on 83 degrees of freedom
+# Multiple R-squared:  0.5003,	Adjusted R-squared:  0.4823 
+# F-statistic:  27.7 on 3 and 83 DF,  p-value: 1.642e-12
+
+summary(lm_rev_mods$ind2)
+#Coefficients:
+#               Estimate Std. Error t value Pr(>|t|)    
+#(Intercept)   -2.803e-16  3.226e-01   0.000    1.000    
+#scale(CWM_H)  -1.496e+00  6.510e-01  -2.299    0.024 *  
+#scale(CWM_LA)  3.033e+00  6.510e-01   4.660 1.18e-05 ***
+#  ---
+#  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+#Residual standard error: 3.009 on 84 degrees of freedom
+#Multiple R-squared:  0.2876,	Adjusted R-squared:  0.2706 
+#F-statistic: 16.95 on 2 and 84 DF,  p-value: 6.526e-07
+
+
