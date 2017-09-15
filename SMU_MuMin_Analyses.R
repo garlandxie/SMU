@@ -52,6 +52,18 @@ library(nlme) # mixed effect models, gives p-values
 # $ind1 - summary of all possible candidate models for multifunctionality index 1
 # $ind2 - summary of all possible candidate models for multifunctionality index 2 
 
+## lm_rev_models: list of "re-evaluated" linear regression models from MuMIn 
+# $org - lm(org ~ scale(RaoQ))
+# $P - lm(P ~ scale(CWM_H))
+# $K - lm(K ~ scale(CWM_H) + scale(CWM_LA) + scale(RaoQ) + scale(CWM_SLA))
+# $NO3 - lm(NO3 ~ scale(CWM_H) + scale(CWM_LA) + scale(CWM_SLA))
+# $totbio - lm(totbio ~ scale(CWM_LA) + scale(CWM_SLA))
+# $strat10 - lm(strat10 ~ scale(CWM_H) + scale(mPD) + scale(PD))
+# nothing significant for crat10 from MuMIn
+# hits10 - lm(hits10 ~ scale(CWM_LA) + scale(CWM_SLA) + scale(RaoQ))
+# nothing significant for ind1 from MuMIn
+# ind2 ~ lm(ind2 ~ scale(CWM_H) + scale(CWM_LA))
+
 ### Import files ####
 
 # imported from Google Drive
@@ -560,5 +572,3 @@ summary(lm_rev_mods$ind2)
 #Residual standard error: 3.009 on 84 degrees of freedom
 #Multiple R-squared:  0.2876,	Adjusted R-squared:  0.2706 
 #F-statistic: 16.95 on 2 and 84 DF,  p-value: 6.526e-07
-
-
