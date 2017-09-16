@@ -1,5 +1,11 @@
 ##### Plots for SMU_FDPD ########
 
+### Libraries #####
+library(ggplot2)
+library(data.table)
+library(dplyr)
+
+
 ### Metadata #####
 
 ## lm_rev_mods: list of "re-evaluated" linear regression models from MuMIn 
@@ -14,7 +20,21 @@
 # nothing significant for ind1 from MuMIn
 # ind2 ~ lm(ind2 ~ scale(CWM_H) + scale(CWM_LA))
 
-### Multi-panel figures - CWM.H ###
+### Mean values of diversity treatments ####
+fnn <- data.table(fnn) 
+fnn_agg <- as.data.frame(fnn[, j= list(mean(mPD, na.rm = TRUE),
+                                       mean(PD, na.rm = TRUE), 
+                                       mean(FD, na.rm = TRUE),
+                                       mean(RaoQ, na.rm = TRUE),
+                                       sd(mPD, na.rm = TRUE), 
+                                       sd(PD, na.rm = TRUE), 
+                                       sd(FD, na.rm = TRUE),
+                                       sd(RaoQ, na.rm = TRUE)),
+                                       by = treat])
+names(fnn_agg) <- c("treat", "mean.MPD", "mean.PD", "mean.FD", "mean.RaoQ", "sd.MPD", "sd.PD", "sd.FD", "sd.RaoQ")
+           
+
+### Multi-panel figures - CWM.H ####
 
 ## CWM_H 
 ## try to write a custom function next time
@@ -164,5 +184,3 @@ termplot(lm_rev_mods$strat10,
          partial.resid = T, 
          xlab = "",
          ylab = "Faith's PD")
-
-
