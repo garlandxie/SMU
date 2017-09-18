@@ -44,6 +44,10 @@ colnames(comm1) <- comm1
 # Prune the megaphylogeny 
 phylo <- prune.sample(comm1, mega.phy)
 
+# Rename Rhodiola_rhodantha as "Sedum_rosea" in the phylogeny
+# Double-check indexing; 5 could be some other species 
+phylo$tip.label[5] <- "Sedum_rosea"
+
 
 ############################################################################
 
