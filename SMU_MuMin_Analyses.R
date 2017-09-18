@@ -130,7 +130,7 @@ summary(avg_models$org)
 
 #Model-averaged coefficients:  
 #  (full average) 
-#Estimate Std. Error Adjusted SE z value Pr(>|z|)  
+                #Estimate Std. Error Adjusted SE z value Pr(>|z|)  
 #(Intercept)     0.00000    0.00000     0.00000      NA       NA  
 #scale(RaoQ)     0.34752    0.17378     0.17537   1.982   0.0475 *
 #scale(mPD)     -0.03644    0.10612     0.10725   0.340   0.7341  
@@ -141,7 +141,7 @@ summary(avg_models$org)
 #scale(CWM_LA)   0.01201    0.08692     0.08810   0.136   0.8915  
 
 #(conditional average) 
-#Estimate Std. Error Adjusted SE z value Pr(>|z|)   
+#                Estimate Std. Error Adjusted SE z value Pr(>|z|)   
 #(Intercept)     0.00000    0.00000     0.00000      NA       NA   
 #scale(RaoQ)     0.38017    0.14362     0.14571   2.609  0.00908 **
 #scale(mPD)     -0.11574    0.16307     0.16540   0.700  0.48410   
@@ -154,9 +154,20 @@ summary(avg_models$org)
 #  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 #Relative variable importance: 
-#  scale(RaoQ) scale(mPD) scale(CWM_H) scale(FD) scale(CWM_SLA) scale(PD) scale(CWM_LA)
+#                 scale(RaoQ) scale(mPD) scale(CWM_H) scale(FD) scale(CWM_SLA) scale(PD) scale(CWM_LA)
 #Importance:          0.91        0.31       0.29         0.27      0.27           0.27      0.26         
 #N containing models:   64          64         64           64        64             64        64 
+
+confint(avg_models$org, level = 0.9)
+#                     5 %      95 %
+#  (Intercept)     0.0000000 0.0000000
+#  scale(RaoQ)     0.1413199 0.6190222
+#  scale(mPD)     -0.3868911 0.1554168
+#  scale(FD)      -0.4082005 0.2787191
+#  scale(PD)      -0.3935328 0.2784917
+#  scale(CWM_H)   -0.2206556 0.4016228
+#  scale(CWM_SLA) -0.2539246 0.1423744
+#  scale(CWM_LA)  -0.2299270 0.3229182
 
 summary(avg_models$P)
 #Model-averaged coefficients:  
@@ -189,6 +200,17 @@ summary(avg_models$P)
 #Importance:          0.88         0.65        0.53          0.43           0.32      0.32       0.31     
 #N containing models:   64           64          64            64             64        64         64  
 
+confint(avg_models$P, level = 0.9)
+#                    5 %        95 %
+#  (Intercept)     0.00000000 0.000000000
+#  scale(CWM_H)    0.03361025 1.084035196
+#  scale(RaoQ)    -0.70572773 0.008677729
+#  scale(CWM_LA)  -0.77733300 0.100254224
+#  scale(CWM_SLA) -0.09223420 0.449258975
+#  scale(mPD)     -0.23716892 0.466503322
+#  scale(PD)      -0.30042327 0.757708822
+#  scale(FD)      -0.75284539 0.349212920
+
 summary(avg_models$K)
 
 # Model-averaged coefficients:  
@@ -204,7 +226,7 @@ summary(avg_models$K)
 #scale(FD)      -0.01313    0.19689     0.19861   0.066    0.947
 
 #(conditional average) 
-#Estimate Std. Error Adjusted SE z value Pr(>|z|)  
+#               Estimate Std. Error Adjusted SE z value Pr(>|z|)  
 #(Intercept)     0.00000    0.00000     0.00000      NA       NA  
 #scale(CWM_H)   -0.63311    0.32250     0.32483   1.949   0.0513 .
 #scale(CWM_LA)   0.45802    0.24755     0.25028   1.830   0.0672 .
@@ -220,6 +242,18 @@ summary(avg_models$K)
 #                  scale(CWM_H) scale(CWM_LA) scale(RaoQ) scale(CWM_SLA) scale(PD) scale(mPD) scale(FD)
 #Importance:          0.78         0.69          0.65        0.59           0.54      0.39       0.35     
 #N containing models:   64           64            64          64             64        64         64
+
+confint(avg_models$K, level = 0.9)
+
+#                     5 %        95 %
+#  (Intercept)     0.000000000  0.00000000
+#  scale(CWM_H)   -1.166487386 -0.09972467
+#  scale(CWM_LA)   0.047415187  0.86862676 **
+#  scale(mPD)     -0.556081183  0.21329483
+#  scale(PD)      -0.110238865  0.72783562
+#  scale(RaoQ)     0.017642885  0.69492367 **
+#  scale(CWM_SLA)  0.002885669  0.47525919 **
+#  scale(FD)      -0.586679573  0.51154078
 
 summary(avg_models$NO3)
 
@@ -253,6 +287,18 @@ summary(avg_models$NO3)
 #Importance:          1.00          1.00         0.99           0.62        0.51       0.30      0.29     
 #N containing models:   64            64           64             64          64         64        64 
 
+confint(avg_models$NO3, level = 0.9)
+
+#                    5 %         95 %
+#  (Intercept)     0.00000000  0.000000000
+#  scale(CWM_H)    0.61740821  1.450172959 **
+#  scale(CWM_LA)  -1.60131517 -0.961739911
+#  scale(CWM_SLA)  0.17086982  0.598328707 **
+#  scale(mPD)     -0.05356823  0.537815531
+#  scale(RaoQ)    -0.61288417  0.000409149
+#  scale(PD)      -0.40200164  0.237875657
+#  scale(FD)      -0.41007028  0.196872318
+
 summary(avg_models$totbio)
 # Model-averaged coefficients:  
 #  (full average) 
@@ -284,6 +330,18 @@ summary(avg_models$totbio)
 #Importance:          1.00          1.00           0.55         0.27        0.26       0.25      0.25     
 #N containing models:   64            64             64           64          64         64        64 
 
+confint(avg_models$totbio, level = 0.9)
+
+#                   5 %       95 %
+#  (Intercept)     0.0000000 0.00000000
+#  scale(CWM_H)   -0.6063462 0.01961168
+#  scale(CWM_LA)   0.2916079 0.90170341 **
+#  scale(CWM_SLA)  0.2998541 0.61918927 **
+#  scale(mPD)     -0.2744027 0.15005504
+#  scale(PD)      -0.3251800 0.21382084
+#  scale(RaoQ)    -0.2031725 0.31035148
+#  scale(FD)      -0.3023773 0.24447426
+
 summary(avg_models$strat10)
 #Model-averaged coefficients:  
 #  (full average) 
@@ -309,6 +367,18 @@ summary(avg_models$strat10)
 #scale(FD)      -0.10176    0.37272     0.37576   0.271   0.7865  
 #---
 #  Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+confint(avg_models$strat10, level = 0.9)
+
+#                     5 %        95 %
+#  (Intercept)     0.00000000  0.00000000
+#  scale(CWM_H)    0.06380065  0.93931793 **
+#  scale(mPD)      0.02550913  0.68683553 **
+#  scale(PD)      -0.94022438 -0.16001694 **
+#  scale(RaoQ)    -0.64541440  0.07906763
+#  scale(CWM_LA)  -0.68308910  0.11934441
+#  scale(CWM_SLA) -0.20243680  0.34310938
+#  scale(FD)      -0.71864811  0.51512214
 
 #Relative variable importance: 
 #                scale(CWM_H) scale(PD) scale(mPD) scale(RaoQ) scale(CWM_LA) scale(FD) scale(CWM_SLA)
@@ -344,6 +414,17 @@ summary(avg_models$crat10)
 # Importance:          0.58         0.54          0.28        0.27      0.25      0.25           0.25      
 #N containing models:   64           64            64          64        64        64             64  
 
+confint(avg_models$crat10, level = 0.9)
+#                      5 %      95 %
+#  (Intercept)     0.00000000 0.0000000
+#  scale(CWM_H)   -0.01278774 0.5488366
+#  scale(CWM_LA)  -0.03314993 0.5250497
+#  scale(RaoQ)    -0.34403417 0.2186584
+#  scale(FD)      -0.46943317 0.2637892
+#  scale(mPD)     -0.25587816 0.2387446
+#  scale(PD)      -0.34250900 0.4405738
+#  scale(CWM_SLA) -0.19318141 0.1987144
+
 summary(avg_models$hits10)
 #Model-averaged coefficients:  
 #  (full average) 
@@ -373,7 +454,19 @@ summary(avg_models$hits10)
 #Relative variable importance: 
 #                 scale(CWM_SLA) scale(CWM_LA) scale(RaoQ) scale(CWM_H) scale(mPD) scale(PD) scale(FD)
 #Importance:          1.00           0.97          0.81        0.51         0.35       0.32      0.28     
-#N containing models:   64             64            64          64           64         64        64     
+#N containing models:   64             64            64          64           64         64        64 
+
+confint(avg_models$hits10, level = 0.9)
+
+#                    5 %        95 %
+#  (Intercept)     0.00000000  0.00000000
+#  scale(CWM_H)   -0.06046728  0.70394334
+#  scale(CWM_LA)   0.29000641  0.85056398 **
+#  scale(CWM_SLA)  0.30835163  0.66822535 **
+#  scale(RaoQ)    -0.53876591 -0.07376159
+#  scale(PD)      -0.20003829  0.52799582
+#  scale(FD)      -0.50858427  0.29242603
+#  scale(mPD)     -0.37772623  0.13085609
 
 summary(avg_models$ind1)
 #Model-averaged coefficients:  
@@ -403,6 +496,18 @@ summary(avg_models$ind1)
 #                 scale(PD) scale(FD) scale(mPD) scale(CWM_LA) scale(CWM_H) scale(CWM_SLA) scale(RaoQ)
 #Importance:          0.71      0.38      0.38       0.36          0.30         0.26           0.26       
 #N containing models:   64        64        64         64            64           64             64  
+
+confint(avg_models$ind1, level = 0.9)
+
+#                     5 %      95 %
+#  (Intercept)     0.00000000 0.0000000
+#  scale(PD)      -0.01044914 0.7364304
+#  scale(mPD)     -0.48331861 0.1354243
+#  scale(FD)      -0.49981425 0.5696630
+#  scale(CWM_LA)  -0.14283192 0.5128580
+#  scale(CWM_SLA) -0.15198995 0.2388906
+#  scale(CWM_H)   -0.50058714 0.2458286
+#  scale(RaoQ)    -0.23139640 0.3093777
 
 summary(avg_models$ind2)
 
@@ -437,6 +542,17 @@ summary(avg_models$ind2)
 #N containing models:   64            64           64          64         64             64        64 
 
 
+confint(avg_models$ind2, level = 0.9)
+
+#                    5 %        95 %
+#  (Intercept)     0.00000000  0.00000000
+#  scale(CWM_H)   -0.82730909 -0.10734853 **
+#  scale(CWM_LA)   0.40082952  1.16047511 **
+#  scale(mPD)     -0.45569179  0.08071804
+#  scale(RaoQ)    -0.08430446  0.49475327
+#  scale(CWM_SLA) -0.11387203  0.30362349
+#  scale(PD)      -0.32465005  0.37760111
+#  scale(FD)      -0.22883161  0.42771217
 
 ### Linear model (re-evaluation) ####
 
@@ -451,7 +567,7 @@ lm_rev_mods <- list(lm(org ~ scale(RaoQ), data = fnn), #org
                     # nothing significant for crat10 from MuMIn
                     lm(hits10 ~ scale(CWM_LA) + scale(CWM_SLA) + scale(RaoQ), data = fnn),
                     # nothing significant for ind1 from MuMIn
-                    lm(ind2 ~ scale(CWM_H) + scale(CWM_LA), data = fnn)
+                    lm(ind2 ~ scale(CWM_H) + scale(CWM_LA) + scale(CWM_SLA), data = fnn)
                     )
 
 names(lm_rev_mods) <- c("org", "P", "K", "NO3", "totbio", "strat10", "hits10", "ind2")
@@ -572,3 +688,6 @@ summary(lm_rev_mods$ind2)
 #Residual standard error: 3.009 on 84 degrees of freedom
 #Multiple R-squared:  0.2876,	Adjusted R-squared:  0.2706 
 #F-statistic: 16.95 on 2 and 84 DF,  p-value: 6.526e-07
+
+
+## 
