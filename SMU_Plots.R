@@ -38,9 +38,13 @@ names(fnn_agg) <- c("treat", "mean.MPD", "mean.PD", "mean.FD", "mean.RaoQ", "sd.
 
 ## CWM_H 
 ## try to write a custom function next time
+# create two horizontal panels that contains three plots 
 par(mfrow = c(2,3))
-par(mar=c(5.1,5,4.1,2.1))
-    
+# adjust plot margins
+par(mar=c(5.1,5.3,4.1,2.1))
+# adjust outer bottom margin to include CWM_H text
+par(oma = c(4,0,0,0))
+#plots
 termplot(lm_rev_mods$NO3, 
          term = "scale(CWM_H)",
          cex.lab = 1.5,
@@ -78,9 +82,18 @@ termplot(lm_rev_mods$strat10,
          xlab = "",
          ylab = "Soil Temperature Index")
 
+# add "CWM_H" to the bottom outer figure margin of the plot
+# outer = T - use the figure margins for text
+# side = 1 - bottom margin
+mtext("CWM_H", outer = T, side = 1)
+
 # CWM_LA
-par(mfrow = c(2,2))
+# create two horizontal panels that contains three plots 
+par(mfrow = c(2,3))
+# adjust plot margins
 par(mar=c(5.1,5,4.1,2.1))
+# adjust outer bottom margin to include CWM_H text
+par(oma = c(4,0,0,0))
 
 termplot(lm_rev_mods$NO3, 
          term = "scale(CWM_LA)",
@@ -114,10 +127,28 @@ termplot(lm_rev_mods$ind2,
          partial.resid = T, 
          xlab = "",
          ylab = "Multifunctionality Index 2")
+termplot(lm_rev_mods$totbio, 
+         term = "scale(CWM_LA)",
+         cex.lab = 1.5,
+         cex.axis = 1.5,
+         pch = 16, 
+         partial.resid = T, 
+         xlab = "",
+         ylab = "Aboveground biomass")
+
+# add "CWM_LA" to the bottom outer figure margin of the plot
+# outer = T - use the figure margins for text
+# side = 1 - bottom margin
+mtext("CWM_LA", outer = T, side = 1)
+
 
 # CWM_SLA 
-par(mfrow = c(1,3))
+# create two horizontal panels that contains two plots 
+par(mfrow = c(2,2))
+# adjust plot margins
 par(mar=c(5.1,5,4.1,2.1))
+# adjust outer bottom margin to include CWM_H text
+par(oma = c(4,0,0,0))
 
 termplot(lm_rev_mods$NO3, 
          term = "scale(CWM_SLA)",
@@ -143,18 +174,31 @@ termplot(lm_rev_mods$totbio,
          partial.resid = T, 
          xlab = "",
          ylab = "Aboveground Biomass")
+termplot(lm_rev_mods$K, 
+         term = "scale(CWM_SLA)",
+         cex.lab = 1.5,
+         cex.axis = 1.5,
+         pch = 16, 
+         partial.resid = T, 
+         xlab = "",
+         ylab = "Potassium")
 
-# RaoQ
-par(mfrow = c(1,3))
+# add "CWM_SLA" to the bottom outer figure margin of the plot
+# outer = T - use the figure margins for text
+# side = 1 - bottom margin
+mtext("CWM_SLA", outer = T, side = 1)
+
+# diversity metrics
+par(mfrow = c(2,3))
 par(mar=c(5.1,5,4.1,2.1))
-
+# RaoQ
 termplot(lm_rev_mods$hits10, 
          term = "scale(RaoQ)",
          cex.lab = 1.5,
          cex.axis = 1.5,
          pch = 16, 
          partial.resid = T, 
-         xlab = "",
+         xlab = "Rao's Q",
          ylab = "Canopy Density")
 termplot(lm_rev_mods$org, 
          term = "scale(RaoQ)",
@@ -162,7 +206,7 @@ termplot(lm_rev_mods$org,
          cex.axis = 1.5,
          pch = 16, 
          partial.resid = T, 
-         xlab = "",
+         xlab = "Rao's Q",
          ylab = "Soil Organic Matter")
 termplot(lm_rev_mods$K, 
          term = "scale(RaoQ)",
@@ -170,17 +214,24 @@ termplot(lm_rev_mods$K,
          cex.axis = 1.5,
          pch = 16, 
          partial.resid = T, 
-         xlab = "",
+         xlab = "Rao's Q",
          ylab = "Substrate Potassium Content")
-
-# PD
-par(mfrow = c(1,1))
-par(mar=  c(5.1,4.1,4.1,2.1))
+# PD 
 termplot(lm_rev_mods$strat10, 
          term = "scale(PD)",
          cex.lab = 1.5,
          cex.axis = 1.5,
          pch = 16, 
          partial.resid = T, 
-         xlab = "",
+         xlab = "PD",
          ylab = "Faith's PD")
+# mPD
+termplot(lm_rev_mods$strat10, 
+         term = "scale(mPD)",
+         cex.lab = 1.5,
+         cex.axis = 1.5,
+         pch = 16, 
+         partial.resid = T, 
+         xlab = "mPD",
+         ylab = "Soil Tmperature Index")
+
